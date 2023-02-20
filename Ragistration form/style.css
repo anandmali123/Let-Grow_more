@@ -2,7 +2,7 @@
     box-sizing:border-box;
 }
 body{
-    background: #C04848; 
+    background: pink; 
     background: -webkit-linear-gradient(to right, #480048, #C04848);  
     background: linear-gradient(to right, #480048, #C04848); 
     /* background-repeat: no-repeat; */
