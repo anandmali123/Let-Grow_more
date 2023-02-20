@@ -1,37 +1,62 @@
-const taskContainer = document.querySelector(".task__container");
-// console.log(taskContainer);
+window.addEventListener('load', () => {
+	const form = document.querySelector("#new-task-form");
+	const input = document.querySelector("#new-task-input");
+	const list_el = document.querySelector("#tasks");
 
-const addItem = () => {
-  const itemList = {
-    id : `${Date.now()}`,
-    list__Item : document.getElementById("item__input").value
-  };
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
 
-  const outputList =
-  `
-  <div class="col p-3">
-      <div class="mb-3 d-flex gap-3">
-        <div>
-          <h5>${itemList.list__Item}</h5>
-        </div>
-        <div>
-          <button type="button" class="btn btn-danger shadow rounded-circle" id=${itemList.id} onclick="deleteButton.apply(this, arguments)"><i class="fas fa-trash-alt"  id=${itemList.id} onclick="deleteButton.apply(this, arguments)"></i></button>
-        </div>
-      </div>
-  </div>
-  `
+		const task = input.value;
 
-  taskContainer.insertAdjacentHTML("beforeend", outputList);
-};
+		const task_el = document.createElement('div');
+		task_el.classList.add('task');
 
+		const task_content_el = document.createElement('div');
+		task_content_el.classList.add('content');
 
-const deleteButton = (event) => {
-  event = window.event;
-  const targetID = event.target.id;
-  const tagname = event.target.tagname;
+		task_el.appendChild(task_content_el);
 
-  if(tagname === "BUTTON")
-    return taskContainer.removeChild(event.target.parentNode.parentNode.parentNode);
-  else
-   return taskContainer.removeChild(event.target.parentNode.parentNode.parentNode.parentNode);
-}
+		const task_input_el = document.createElement('input');
+		task_input_el.classList.add('text');
+		task_input_el.type = 'text';
+		task_input_el.value = task;
+		task_input_el.setAttribute('readonly', 'readonly');
+
+		task_content_el.appendChild(task_input_el);
+
+		const task_actions_el = document.createElement('div');
+		task_actions_el.classList.add('actions');
+		
+		const task_edit_el = document.createElement('button');
+		task_edit_el.classList.add('edit');
+		task_edit_el.innerText = 'Edit';
+
+		const task_delete_el = document.createElement('button');
+		task_delete_el.classList.add('delete');
+		task_delete_el.innerText = 'Delete';
+
+		task_actions_el.appendChild(task_edit_el);
+		task_actions_el.appendChild(task_delete_el);
+
+		task_el.appendChild(task_actions_el);
+
+		list_el.appendChild(task_el);
+
+		input.value = '';
+
+		task_edit_el.addEventListener('click', (e) => {
+			if (task_edit_el.innerText.toLowerCase() == "edit") {
+				task_edit_el.innerText = "Save";
+				task_input_el.removeAttribute("readonly");
+				task_input_el.focus();
+			} else {
+				task_edit_el.innerText = "Edit";
+				task_input_el.setAttribute("readonly", "readonly");
+			}
+		});
+
+		task_delete_el.addEventListener('click', (e) => {
+			list_el.removeChild(task_el);
+		});
+	});
+});
